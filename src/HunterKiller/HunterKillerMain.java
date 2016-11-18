@@ -9,7 +9,7 @@ import lejos.hardware.KeyListener;
 import java.util.ArrayList;
 
 import Behaviors.BehaviorBase;
-import Behaviors.HunterKillerIRMode;
+import Behaviors.IRMode;
 import Behaviors.IMode;
 import Behaviors.IRBehaviorBase;
 import Behaviors.IRBehaviorSeek;
@@ -100,12 +100,14 @@ public class HunterKillerMain {
 	}
 	
 	public void execute() {
-		Thread IRThread = new Thread(new Runnable() {
+		Thread IRBehaviorThread = new Thread(new Runnable() {
 	         public void run()
 	         {
 	              processIR();
 	         }
-	});
+		});
+		
+		IRBehaviorThread.run();
 	}
 	
 	public void processIR()	{

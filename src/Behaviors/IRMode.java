@@ -1,11 +1,11 @@
 package Behaviors;
 
-public enum HunterKillerIRMode implements IMode {
+public enum IRMode implements IMode {
 	Seeking(0), 
 	LockedOn(1);
 	
     private final int value;
-    private HunterKillerIRMode(int value) {
+    private IRMode(int value) {
         this.value = value;
     }
 

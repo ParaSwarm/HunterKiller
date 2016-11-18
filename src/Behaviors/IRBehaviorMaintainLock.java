@@ -7,7 +7,7 @@ public class IRBehaviorMaintainLock extends IRBehaviorBase {
 
 	public IRBehaviorMaintainLock(EV3IRSensor irSensor, EV3MediumRegulatedMotor irMotor) {
 		super(irSensor, irMotor);
-		this.ImplementedMode = HunterKillerIRMode.LockedOn;
+		this.ImplementedMode = IRMode.LockedOn;
 	}
 
 	@Override

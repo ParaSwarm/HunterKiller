@@ -7,7 +7,7 @@ public class IRBehaviorSeek extends IRBehaviorBase {
 
 	public IRBehaviorSeek(EV3IRSensor irSensor, EV3MediumRegulatedMotor irMotor) {
 		super(irSensor, irMotor);
-		this.ImplementedMode = HunterKillerIRMode.Seeking;
+		this.ImplementedMode = IRMode.Seeking;
 	}
 
 	@Override
@@ -16,8 +16,8 @@ public class IRBehaviorSeek extends IRBehaviorBase {
 		IRSample sample = this.GetIRSample();
 		
 		this.NextMode = sample.angleOfTarget > 10
-				? HunterKillerIRMode.LockedOn
-				: HunterKillerIRMode.Seeking;
+				? IRMode.LockedOn
+				: IRMode.Seeking;
 		
 		//System.out.println("Thing: " + sample.angleOfTarget);
 		//System.out.println("Distance: " + sample.distanceToTarget);

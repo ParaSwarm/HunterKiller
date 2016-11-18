@@ -10,6 +10,9 @@ import java.util.ArrayList;
 
 import Behaviors.BehaviorBase;
 import Behaviors.IRMode;
+import Behaviors.MovementBehaviorBase;
+import Behaviors.MovementBehaviorEngage;
+import Behaviors.MovementBehaviorSeek;
 import Behaviors.IMode;
 import Behaviors.IRBehaviorBase;
 import Behaviors.IRBehaviorSeek;
@@ -29,16 +32,23 @@ public class HunterKillerMain {
 	private int IRMotorSpeed = 80;
 	private int IRMotorAcceleration = 6000;
 	private EV3MediumRegulatedMotor IRMotor;
+
+	private EV3MediumRegulatedMotor LeftWheelMotor;
+	private EV3MediumRegulatedMotor RightWheelMotor;
 	
 	private EV3IRSensor IRSensor;
 	
 	private IRBehaviorBase IRBehavior;
 	private ArrayList<BehaviorBase> IRBehaviors;
 	
+	private MovementBehaviorBase MovementBehavior;
+	private ArrayList<BehaviorBase> MovementBehaviors;
+	
 	public HunterKillerMain() {
 		setupButtons();
 		setupMotorsAndSensors();
 		setupIRBehaviors();
+		setupMovementBehaviors();
 	}
 
 	private void setupButtons(){
@@ -77,6 +87,9 @@ public class HunterKillerMain {
 			IRMotor = new EV3MediumRegulatedMotor(MotorPort.A);
 			IRMotor.setAcceleration(IRMotorAcceleration);
 			IRMotor.setSpeed(IRMotorSpeed);
+
+			LeftWheelMotor = new EV3MediumRegulatedMotor(MotorPort.B);
+			RightWheelMotor = new EV3MediumRegulatedMotor(MotorPort.D);
 			
 			port = LocalEV3.get().getPort("S1");
 			IRSensor = new EV3IRSensor(port);
@@ -96,6 +109,16 @@ public class HunterKillerMain {
 		
 		IRBehavior = irBehaviorSeek;
 	}
+
+	private void setupMovementBehaviors() {
+		MovementBehaviors = new ArrayList<>();
+		MovementBehaviorSeek MovementBehaviorSeek = new MovementBehaviorSeek(LeftWheelMotor, RightWheelMotor);
+		MovementBehaviorEngage MovementBehaviorEngage = new MovementBehaviorEngage(LeftWheelMotor, RightWheelMotor);
+		MovementBehaviors.add(MovementBehaviorSeek);
+		MovementBehaviors.add(MovementBehaviorEngage);
+		
+		MovementBehavior = MovementBehaviorSeek;
+	}
 	
 	public void execute() {
 		Thread IRBehaviorThread = new Thread(new Runnable() {
@@ -105,15 +128,30 @@ public class HunterKillerMain {
 	         }
 		});
 		
-		IRBehaviorThread.run();
+		Thread MovementBehaviorThread = new Thread(new Runnable() {
+	         public void run()
+	         {
+	              processMovement();
+	         }
+		});
+
+		IRBehaviorThread.start();
+		MovementBehaviorThread.start();
 		
 		while(true) { }
 	}
-	
+
 	public void processIR()	{
 		while(true) {
 			this.IRBehavior.ExecuteBehavior();
 			this.IRBehavior = (IRBehaviorBase)this.GetBehavior(this.IRBehaviors, this.IRBehavior);
+		}
+	}
+
+	public void processMovement()	{
+		while(true) {
+			this.MovementBehavior.ExecuteBehavior();
+			this.MovementBehavior = (MovementBehaviorBase)this.GetBehavior(this.MovementBehaviors, this.MovementBehavior);
 		}
 	}
 	

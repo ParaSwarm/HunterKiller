@@ -25,8 +25,6 @@ public class IRBehaviorSeek extends IRBehaviorBase {
 				} else if(IRMotor.getPosition() <= -75) {
 					IRMotor.forward();
 				}
-
-				System.out.println("Thing: " + IRMotor.getPosition());
 			}
 		}
 		else {
@@ -36,9 +34,6 @@ public class IRBehaviorSeek extends IRBehaviorBase {
 		this.NextMode = sample.targetDetected()
 				? IRMode.LockedOn
 				: IRMode.Seeking;
-		
-		//System.out.println("Thing: " + sample.angleOfTarget);
-		//System.out.println("Distance: " + sample.distanceToTarget);
 	}
 
 	@Override

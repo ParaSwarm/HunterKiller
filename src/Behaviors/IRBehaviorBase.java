@@ -21,6 +21,4 @@ public abstract class IRBehaviorBase extends BehaviorBase {
 		IRSensor.fetchSample(IRSampleArray, 0);
 		return new IRSample(IRSampleArray);
 	}
-	
-	public abstract void ExecuteBehavior();
 }

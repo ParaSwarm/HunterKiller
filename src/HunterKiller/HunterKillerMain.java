@@ -25,8 +25,9 @@ import lejos.hardware.sensor.EV3IRSensor;
 public class HunterKillerMain {
 
 	Port port;
-	
-	private int IRMotorAcceleration = 1000;
+
+	private int IRMotorSpeed = 80;
+	private int IRMotorAcceleration = 6000;
 	private EV3MediumRegulatedMotor IRMotor;
 	
 	private EV3IRSensor IRSensor;
@@ -58,8 +59,6 @@ public class HunterKillerMain {
 
 			@Override
 			public void keyReleased(Key k) {
-				IRMotorAcceleration -= 250;
-				System.out.println(IRMotorAcceleration);
 			}
 		});
 		Button.RIGHT.addKeyListener(new KeyListener() {
@@ -69,8 +68,6 @@ public class HunterKillerMain {
 
 			@Override
 			public void keyReleased(Key k) {
-				IRMotorAcceleration += 250;
-				System.out.println(IRMotorAcceleration);
 			}
 		});
 	}
@@ -79,6 +76,7 @@ public class HunterKillerMain {
 		try {
 			IRMotor = new EV3MediumRegulatedMotor(MotorPort.A);
 			IRMotor.setAcceleration(IRMotorAcceleration);
+			IRMotor.setSpeed(IRMotorSpeed);
 			
 			port = LocalEV3.get().getPort("S1");
 			IRSensor = new EV3IRSensor(port);
@@ -108,6 +106,8 @@ public class HunterKillerMain {
 		});
 		
 		IRBehaviorThread.run();
+		
+		while(true) { }
 	}
 	
 	public void processIR()	{
@@ -122,9 +122,10 @@ public class HunterKillerMain {
 			return currentBehavior;
 		}
 		
-		for(BehaviorBase behavior : behaviors) {
-			if(behavior.ImplementedMode == currentBehavior.NextMode) {
-				return behavior;
+		for(BehaviorBase newBehavior : behaviors) {
+			if(newBehavior.ImplementedMode == currentBehavior.NextMode) {
+				currentBehavior.ResetMode();
+				return newBehavior;
 			}
 		}
 		

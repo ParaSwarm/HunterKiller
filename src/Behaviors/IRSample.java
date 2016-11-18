@@ -10,4 +10,10 @@ public class IRSample {
 	public int angleOfTarget;
 	
 	public float distanceToTarget;
+	
+	public boolean targetDetected() {
+		return angleOfTarget <= 1 
+			&& distanceToTarget != 0
+			&& distanceToTarget != Float.POSITIVE_INFINITY;
+	}
 }

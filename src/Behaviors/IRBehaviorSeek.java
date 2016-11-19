@@ -8,13 +8,13 @@ public class IRBehaviorSeek extends IRBehaviorBase {
 	public IRBehaviorSeek(EV3IRSensor irSensor, EV3MediumRegulatedMotor irMotor) {
 		super(irSensor, irMotor);
 		this.ImplementedMode = IRMode.Seeking;
-		this.ResetMode();
+		this.resetMode();
 	}
 
 	@Override
-	public void ExecuteBehavior() {
+	public void executeBehavior() {
 		
-		IRSample sample = this.GetIRSample();
+		IRSample sample = this.getIRSample();
 		
 		if(!sample.targetDetected()) {
 			if(!IRMotor.isMoving()) {
@@ -37,7 +37,7 @@ public class IRBehaviorSeek extends IRBehaviorBase {
 	}
 
 	@Override
-	public void ResetMode() {
+	public void resetMode() {
 		this.NextMode = IRMode.Seeking;
 	}
 }

@@ -17,7 +17,7 @@ public abstract class IRBehaviorBase extends BehaviorBase {
 	
 	protected float[] IRSampleArray;
 	
-	protected IRSample GetIRSample() {
+	protected IRSample getIRSample() {
 		IRSensor.fetchSample(IRSampleArray, 0);
 		return new IRSample(IRSampleArray);
 	}

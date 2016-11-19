@@ -7,27 +7,35 @@ public class MovementBehaviorSeek extends MovementBehaviorBase {
 	public MovementBehaviorSeek(EV3MediumRegulatedMotor leftWheelMotor, EV3MediumRegulatedMotor rightWheelMotor) {
 		super(leftWheelMotor, rightWheelMotor);
 		this.ImplementedMode = MovementMode.Seeking;
-		this.ResetMode();
+		this.resetMode();
 	}
 
+	private int distanceToTravel = 3000;
+	
+	private boolean movingForward = true;
+	
 	@Override
-	public void ExecuteBehavior() {
+	public void executeBehavior() {
 		
 		if(!this.RightWheelMotor.isMoving()) {
-			this.RightWheelMotor.forward();
-			this.LeftWheelMotor.forward();	
+			this.goForward();
 		} else {
-			if(RightWheelMotor.getTachoCount() > 1000) {
-				this.RightWheelMotor.stop();
-				this.LeftWheelMotor.stop();	
+			if(this.getTachoCount() >= distanceToTravel || this.getTachoCount() <= -distanceToTravel) {
+				this.resetTachometer();
+				
+				if(this.movingForward)
+					this.goBackwards();
+				else
+					this.goForward();
+
+				movingForward = !movingForward;
 			}
 		}
-
-		System.out.println("yo " + RightWheelMotor.getTachoCount());
 	}
 
 	@Override
-	public void ResetMode() {
+	public void resetMode() {
 		this.NextMode = MovementMode.Seeking;
+		this.resetSpeeds();
 	}
 }

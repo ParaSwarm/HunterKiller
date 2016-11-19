@@ -8,13 +8,13 @@ public class IRBehaviorMaintainLock extends IRBehaviorBase {
 	public IRBehaviorMaintainLock(EV3IRSensor irSensor, EV3MediumRegulatedMotor irMotor) {
 		super(irSensor, irMotor);
 		this.ImplementedMode = IRMode.LockedOn;
-		this.ResetMode();
+		this.resetMode();
 	}
 
 	@Override
-	public void ExecuteBehavior() {
+	public void executeBehavior() {
 		
-		IRSample sample = this.GetIRSample();
+		IRSample sample = this.getIRSample();
 		
 		if(sample.targetDetected()) {
 			IRMotor.rotate(sample.angleOfTarget * 2);
@@ -24,7 +24,7 @@ public class IRBehaviorMaintainLock extends IRBehaviorBase {
 	}
 
 	@Override
-	public void ResetMode() {
+	public void resetMode() {
 		this.NextMode = IRMode.LockedOn;
 	}
 	

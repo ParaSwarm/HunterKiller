@@ -6,7 +6,7 @@ public abstract class BehaviorBase {
 	
 	public IMode NextMode;
 
-	public abstract void ExecuteBehavior();
+	public abstract void executeBehavior();
 	
-	public abstract void ResetMode();
+	public abstract void resetMode();
 }

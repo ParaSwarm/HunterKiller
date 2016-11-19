@@ -9,20 +9,24 @@ public class IRBehaviorSeek extends IRBehaviorBase {
 		super(irSensor, irMotor);
 		this.ImplementedMode = IRMode.Seeking;
 		this.resetMode();
+		this.IRMotor.rotateTo(0);
 	}
 
+	private final int seekMaximumAngle = 90;
+	
 	@Override
 	public void executeBehavior() {
-		
+		System.out.println("Seeking");
 		IRSample sample = this.getIRSample();
 		
 		if(!sample.targetDetected()) {
 			if(!IRMotor.isMoving()) {
 				IRMotor.forward();
 			} else {
-				if(IRMotor.getPosition() >= 75) {
+				if(IRMotor.getPosition() >= seekMaximumAngle) {
 					IRMotor.backward();
-				} else if(IRMotor.getPosition() <= -75) {
+				} 
+				else if(IRMotor.getPosition() <= -seekMaximumAngle) {
 					IRMotor.forward();
 				}
 			}

@@ -8,6 +8,7 @@ public class MovementBehaviorSeek extends MovementBehaviorBase {
 		super(leftWheelMotor, rightWheelMotor);
 		this.ImplementedMode = MovementMode.Seeking;
 		this.resetMode();
+		this.resetSpeeds();
 	}
 
 	private int distanceToTravel = 3000;

@@ -12,8 +12,18 @@ public class IRSample {
 	public float distanceToTarget;
 	
 	public boolean targetDetected() {
-		return angleOfTarget <= 1 
-			&& distanceToTarget != 0
-			&& distanceToTarget != Float.POSITIVE_INFINITY;
+		return distanceToTarget != Float.POSITIVE_INFINITY;
+	}
+	
+	public boolean targetAtMediumOrGreaterDistance() {
+		return distanceToTarget > 35;
+	}
+	
+	public int angleToMaintainLock() {
+		if(this.targetAtMediumOrGreaterDistance()) {
+			return 3;
+		}
+		
+		return 1;
 	}
 }

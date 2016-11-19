@@ -24,7 +24,9 @@ import lejos.hardware.ev3.LocalEV3;
 
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
+import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3IRSensor;
+import lejos.hardware.sensor.EV3TouchSensor;
 
 public class HunterKillerMain {
 
@@ -38,6 +40,7 @@ public class HunterKillerMain {
 	private EV3MediumRegulatedMotor RightWheelMotor;
 	
 	private EV3IRSensor IRSensor;
+	private EV3TouchSensor TouchSensor;
 	
 	private IRBehaviorBase IRBehavior;
 	private ArrayList<BehaviorBase> IRBehaviors;
@@ -111,8 +114,9 @@ public class HunterKillerMain {
 			
 			System.out.println(LeftWheelMotor.getSpeed());
 			
-			port = LocalEV3.get().getPort("S1");
-			IRSensor = new EV3IRSensor(port);
+			TouchSensor = new EV3TouchSensor(SensorPort.S2);
+			
+			IRSensor = new EV3IRSensor(SensorPort.S1);
 			IRSensor.setCurrentMode("Seek");
 			
 		} catch (Exception e) {
@@ -142,17 +146,11 @@ public class HunterKillerMain {
 	
 	public void execute() {
 		IRBehaviorThread = new Thread(new Runnable() {
-	         public void run()
-	         {
-	              processIR();
-	         }
+	         public void run() { processIR(); }
 		});
 		
 		MovementBehaviorThread = new Thread(new Runnable() {
-	         public void run()
-	         {
-	              processMovement();
-	         }
+	         public void run() { processMovement(); }
 		});
 
 		IRBehaviorThread.start();

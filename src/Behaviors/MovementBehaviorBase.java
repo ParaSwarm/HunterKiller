@@ -1,7 +1,6 @@
 package Behaviors;
 
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
-import lejos.hardware.sensor.EV3IRSensor;
 
 public abstract class MovementBehaviorBase extends BehaviorBase {
 

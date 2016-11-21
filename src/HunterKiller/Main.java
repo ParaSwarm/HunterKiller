@@ -5,7 +5,6 @@ public class Main {
 		try {
 			
 			HunterKillerMain hunterKiller = new HunterKillerMain();
-		
 			hunterKiller.execute();
 		} catch (Exception e) {
 			e.printStackTrace();

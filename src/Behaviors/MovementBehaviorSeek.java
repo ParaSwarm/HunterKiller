@@ -9,6 +9,7 @@ public class MovementBehaviorSeek extends MovementBehaviorBase {
 		this.ImplementedMode = MovementMode.Seeking;
 		this.resetMode();
 		this.resetSpeeds();
+		this.stop();
 	}
 
 	private int distanceToTravel = 3000;

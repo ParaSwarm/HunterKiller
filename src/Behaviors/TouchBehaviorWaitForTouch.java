@@ -1,5 +1,6 @@
 package Behaviors;
 
+import lejos.hardware.Sound;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.sensor.EV3TouchSensor;
 
@@ -14,12 +15,12 @@ public class TouchBehaviorWaitForTouch extends TouchBehaviorBase {
 	@Override
 	public void executeBehavior() {
 		if(this.getTouchSample().buttonDepressed) {
-			
+			Sound.twoBeeps();
 		}
 	}
 
 	@Override
 	public void resetMode() {
-		this.ImplementedMode = TouchMode.Waiting;
+		this.NextMode = TouchMode.Waiting;
 	}
 }

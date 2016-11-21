@@ -14,6 +14,8 @@ import Behaviors.MovementBehaviorBase;
 import Behaviors.MovementBehaviorEngage;
 import Behaviors.MovementBehaviorSeek;
 import Behaviors.MovementMode;
+import Behaviors.TouchBehaviorBase;
+import Behaviors.TouchBehaviorWaitForTouch;
 import Behaviors.IMode;
 import Behaviors.IRBehaviorBase;
 import Behaviors.IRBehaviorSeek;
@@ -30,8 +32,6 @@ import lejos.hardware.sensor.EV3TouchSensor;
 
 public class HunterKillerMain {
 
-	Port port;
-
 	private int IRMotorSpeed = 80;
 	private int IRMotorAcceleration = 6000;
 	private EV3MediumRegulatedMotor IRMotor;
@@ -41,6 +41,9 @@ public class HunterKillerMain {
 	
 	private EV3IRSensor IRSensor;
 	private EV3TouchSensor TouchSensor;
+
+	private TouchBehaviorBase TouchBehavior;
+	private ArrayList<BehaviorBase> TouchBehaviors;
 	
 	private IRBehaviorBase IRBehavior;
 	private ArrayList<BehaviorBase> IRBehaviors;
@@ -55,6 +58,7 @@ public class HunterKillerMain {
 		setupMotorsAndSensors();
 		setupIRBehaviors();
 		setupMovementBehaviors();
+		setupTouchBehaviors();
 	}
 
 	private void setupButtons(){
@@ -111,9 +115,7 @@ public class HunterKillerMain {
 
 			LeftWheelMotor = new EV3MediumRegulatedMotor(MotorPort.B);
 			RightWheelMotor = new EV3MediumRegulatedMotor(MotorPort.D);
-			
-			System.out.println(LeftWheelMotor.getSpeed());
-			
+
 			TouchSensor = new EV3TouchSensor(SensorPort.S2);
 			
 			IRSensor = new EV3IRSensor(SensorPort.S1);
@@ -143,6 +145,14 @@ public class HunterKillerMain {
 		
 		MovementBehavior = MovementBehaviorSeek;
 	}
+
+	private void setupTouchBehaviors() {
+		TouchBehaviors = new ArrayList<>();
+		TouchBehaviorWaitForTouch TouchBehaviorWaitForTouch = new TouchBehaviorWaitForTouch(TouchSensor);
+		TouchBehaviors.add(TouchBehaviorWaitForTouch);
+		
+		TouchBehavior = TouchBehaviorWaitForTouch;
+	}
 	
 	public void execute() {
 		IRBehaviorThread = new Thread(new Runnable() {
@@ -153,10 +163,13 @@ public class HunterKillerMain {
 	         public void run() { processMovement(); }
 		});
 
-		IRBehaviorThread.start();
-		MovementBehaviorThread.start();
+//		IRBehaviorThread.start();
+//		MovementBehaviorThread.start();
 		
-		while(true) { }
+		while(true) {
+			this.TouchBehavior.executeBehavior();
+			this.TouchBehavior = (TouchBehaviorBase)this.GetBehavior(this.TouchBehaviors, this.TouchBehavior);
+		}
 	}
 
 	public void processIR()	{

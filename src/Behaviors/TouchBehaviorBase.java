@@ -6,6 +6,7 @@ public abstract class TouchBehaviorBase extends BehaviorBase {
 
 	public TouchBehaviorBase(EV3TouchSensor touchSensor) {
 		this.TouchSensor = touchSensor;
+		TouchSampleArray = new float[TouchSensor.sampleSize()];
 	}
 
 	protected EV3TouchSensor TouchSensor;

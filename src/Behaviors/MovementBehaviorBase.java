@@ -14,6 +14,11 @@ public abstract class MovementBehaviorBase extends BehaviorBase {
 	protected EV3MediumRegulatedMotor LeftWheelMotor;
 	protected EV3MediumRegulatedMotor RightWheelMotor;
 	
+	protected void stop() {
+		this.RightWheelMotor.stop();
+		this.LeftWheelMotor.stop();
+	}
+	
 	protected void goForward() {
 		this.RightWheelMotor.forward();
 		this.LeftWheelMotor.forward();

@@ -9,4 +9,6 @@ public abstract class BehaviorBase {
 	public abstract void executeBehavior();
 	
 	public abstract void resetMode();
+	
+	public abstract void ceaseBehavior();
 }

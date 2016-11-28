@@ -17,4 +17,7 @@ public abstract class TouchBehaviorBase extends BehaviorBase {
 		TouchSensor.fetchSample(TouchSampleArray, 0);
 		return new TouchSample(TouchSampleArray);
 	}
+	
+	@Override
+	public void ceaseBehavior() { }
 }

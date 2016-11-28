@@ -21,4 +21,9 @@ public abstract class IRBehaviorBase extends BehaviorBase {
 		IRSensor.fetchSample(IRSampleArray, 0);
 		return new IRSample(IRSampleArray);
 	}
+	
+	@Override
+	public void ceaseBehavior(){
+		this.IRMotor.stop();
+	}
 }

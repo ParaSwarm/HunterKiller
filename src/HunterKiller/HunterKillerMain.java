@@ -18,6 +18,7 @@ import Behaviors.MovementBehaviorSeek;
 import Behaviors.MovementMode;
 import Behaviors.TouchBehaviorBase;
 import Behaviors.TouchBehaviorWaitForTouch;
+import Behaviors.TouchMode;
 import Behaviors.IMode;
 import Behaviors.IRBehaviorBase;
 import Behaviors.IRBehaviorSeek;
@@ -165,33 +166,50 @@ public class HunterKillerMain {
 	         public void run() { processMovement(); }
 		});
 
-//		IRBehaviorThread.start();
-//		MovementBehaviorThread.start();
+		IRBehaviorThread.start();
+		MovementBehaviorThread.start();
 		
-		while(true) {
-			this.TouchBehavior.executeBehavior();
-			this.TouchBehavior = (TouchBehaviorBase)this.GetBehavior(this.TouchBehaviors, this.TouchBehavior);
-		}
+		processTouchBehavior();
 	}
 
-	public void processIR()	{
+	private void processIR()	{
 		while(true) {
+			if(this.IRBehavior == null)
+				continue;
+			
 			this.IRBehavior.executeBehavior();
 			this.IRBehavior = (IRBehaviorBase)this.GetBehavior(this.IRBehaviors, this.IRBehavior);
 		}
 	}
 
-	public void processMovement()	{
+	private void processMovement()	{
 		while(true) {
+			if(this.MovementBehavior == null)
+				continue;
+			
 			this.MovementBehavior.executeBehavior();
 			this.MovementBehavior.setIRMode(IRBehavior.ImplementedMode);
 			this.MovementBehavior = (MovementBehaviorBase)this.GetBehavior(this.MovementBehaviors, this.MovementBehavior);
 		}
 	}
 	
+	private void processTouchBehavior() {
+		while(true) {
+			if(this.TouchBehavior.NextMode == TouchMode.Depressed) {
+				continue;
+			}
+			this.TouchBehavior.executeBehavior();
+		}
+	}
+	
 	private BehaviorBase GetBehavior(ArrayList<BehaviorBase> behaviors, BehaviorBase currentBehavior) {
 		if(currentBehavior.NextMode == currentBehavior.ImplementedMode){
 			return currentBehavior;
+		}
+		
+		if(this.TouchBehavior.NextMode == TouchMode.Depressed) {
+			currentBehavior.ceaseBehavior();
+			return null;
 		}
 		
 		for(BehaviorBase newBehavior : behaviors) {

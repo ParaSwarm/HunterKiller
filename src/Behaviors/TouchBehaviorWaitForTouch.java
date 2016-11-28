@@ -12,15 +12,12 @@ public class TouchBehaviorWaitForTouch extends TouchBehaviorBase {
 		super(touchSensor);
 		this.ImplementedMode = TouchMode.Waiting;
 		this.resetMode();
-		this.defeatSound = new File("defeat.wav");
 	}
-
-	private File defeatSound;
 	
 	@Override
 	public void executeBehavior() {
 		if(this.getTouchSample().buttonDepressed) {
-			Sound.playSample(defeatSound, 100);
+			this.NextMode = TouchMode.Depressed;
 		}
 	}
 

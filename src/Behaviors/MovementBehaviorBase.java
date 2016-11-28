@@ -74,4 +74,10 @@ public abstract class MovementBehaviorBase extends BehaviorBase {
 			this.NextMode = MovementMode.Engaging;
 		}
 	}
+	
+	@Override
+	public void ceaseBehavior() {
+		this.RightWheelMotor.stop();
+		this.LeftWheelMotor.stop();
+	}
 }

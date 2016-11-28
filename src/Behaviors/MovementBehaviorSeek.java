@@ -12,7 +12,7 @@ public class MovementBehaviorSeek extends MovementBehaviorBase {
 		this.stop();
 	}
 
-	private int distanceToTravel = 3000;
+	private int distanceToTravel = 100;//3000;
 	
 	private boolean movingForward = true;
 	

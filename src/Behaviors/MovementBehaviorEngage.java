@@ -17,18 +17,18 @@ public class MovementBehaviorEngage extends MovementBehaviorBase {
 	public void executeBehavior() {
 		float angleOfTarget = IRMotor.getPosition();
 		
-		if(angleOfTarget < -10) {		// Target is left of center
+		if(angleOfTarget < -18) {		// Target is left of center
 			if(angleOfTarget < -30) {
 				this.rotateLeft();
 			} else {
-				this.setSpeed(angleOfTarget * 15, angleOfTarget * 8);
+				this.setSpeed(angleOfTarget * 27, angleOfTarget * 15);
 				this.goForward();
 			}
-		} else if (angleOfTarget > 10) {	// Target is right of center
+		} else if (angleOfTarget > 18) {	// Target is right of center
 			if(angleOfTarget > 30) {
 				this.rotateRight();
 			} else {
-				this.setSpeed(angleOfTarget * 8, angleOfTarget * 15);
+				this.setSpeed(angleOfTarget * 15, angleOfTarget * 27);
 				this.goForward();
 			}
 		} else {

@@ -17,6 +17,7 @@ import Behaviors.MovementBehaviorEngage;
 import Behaviors.MovementBehaviorSeek;
 import Behaviors.MovementMode;
 import Behaviors.TouchBehaviorBase;
+import Behaviors.TouchBehaviorDepressed;
 import Behaviors.TouchBehaviorWaitForTouch;
 import Behaviors.TouchMode;
 import Behaviors.IMode;
@@ -62,6 +63,7 @@ public class HunterKillerMain {
 		setupIRBehaviors();
 		setupMovementBehaviors();
 		setupTouchBehaviors();
+		System.out.println("Starting the hunt.");
 	}
 
 	private void setupButtons(){
@@ -73,39 +75,6 @@ public class HunterKillerMain {
 			@Override
 			public void keyReleased(Key k) {
 				System.exit(1);
-			}
-		});
-		Button.ENTER.addKeyListener(new KeyListener() {
-			@Override
-			public void keyPressed(Key k) {
-			}
-
-			@Override
-			public void keyReleased(Key k) {
-//				try {
-//					IRBehaviorThread.sleep(10000);
-//					MovementBehaviorThread.sleep(10000);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-			}
-		});
-		Button.LEFT.addKeyListener(new KeyListener() {
-			@Override
-			public void keyPressed(Key k) {
-			}
-
-			@Override
-			public void keyReleased(Key k) {
-			}
-		});
-		Button.RIGHT.addKeyListener(new KeyListener() {
-			@Override
-			public void keyPressed(Key k) {
-			}
-
-			@Override
-			public void keyReleased(Key k) {
 			}
 		});
 	}
@@ -152,7 +121,9 @@ public class HunterKillerMain {
 	private void setupTouchBehaviors() {
 		TouchBehaviors = new ArrayList<>();
 		TouchBehaviorWaitForTouch TouchBehaviorWaitForTouch = new TouchBehaviorWaitForTouch(TouchSensor);
+		TouchBehaviorDepressed TouchBehaviorDepressed = new TouchBehaviorDepressed(TouchSensor);
 		TouchBehaviors.add(TouchBehaviorWaitForTouch);
+		TouchBehaviors.add(TouchBehaviorDepressed);
 		
 		TouchBehavior = TouchBehaviorWaitForTouch;
 	}
@@ -169,7 +140,7 @@ public class HunterKillerMain {
 		IRBehaviorThread.start();
 		MovementBehaviorThread.start();
 		
-		processTouchBehavior();
+		processTouch();
 	}
 
 	private void processIR()	{
@@ -193,23 +164,19 @@ public class HunterKillerMain {
 		}
 	}
 	
-	private void processTouchBehavior() {
+	private void processTouch() {
 		while(true) {
-			if(this.TouchBehavior.NextMode == TouchMode.Depressed) {
-				continue;
-			}
 			this.TouchBehavior.executeBehavior();
+			
+			if(this.TouchBehavior.NextMode == TouchMode.Depressed) {
+				endHunt();
+			}
 		}
 	}
 	
 	private BehaviorBase GetBehavior(ArrayList<BehaviorBase> behaviors, BehaviorBase currentBehavior) {
 		if(currentBehavior.NextMode == currentBehavior.ImplementedMode){
 			return currentBehavior;
-		}
-		
-		if(this.TouchBehavior.NextMode == TouchMode.Depressed) {
-			currentBehavior.ceaseBehavior();
-			return null;
 		}
 		
 		for(BehaviorBase newBehavior : behaviors) {
@@ -222,4 +189,15 @@ public class HunterKillerMain {
 		return null;
 	}
 	
+	private void endHunt() {
+		this.IRBehaviorThread.interrupt();
+		this.MovementBehaviorThread.interrupt();
+		this.IRBehavior.ceaseBehavior();
+		this.MovementBehavior.ceaseBehavior();
+		
+		this.TouchBehavior = (TouchBehaviorBase)this.GetBehavior(this.TouchBehaviors, this.TouchBehavior);
+		this.TouchBehavior.executeBehavior();
+		
+		System.exit(1);
+	}
 }

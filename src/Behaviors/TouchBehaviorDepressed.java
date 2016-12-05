@@ -12,14 +12,14 @@ public class TouchBehaviorDepressed extends TouchBehaviorBase {
 		super(touchSensor);
 		this.ImplementedMode = TouchMode.Depressed;
 		this.resetMode();
-		this.defeatSound = new File("defeat.wav");
+		this.victorySound = new File("victory.wav");
 	}
 
-	private File defeatSound;
+	private File victorySound;
 	
 	@Override
 	public void executeBehavior() {
-		Sound.playSample(defeatSound, 100);
+		Sound.playSample(victorySound, 100);
 	}
 
 	@Override
